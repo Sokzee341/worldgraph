@@ -7,10 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --accent: #ffffff;
-            --gray-deep: #111;
-            --text-dim: rgba(255,255,255,0.4);
+            --bg: #02040a;
+            --accent: #007aff;
+            --gray-deep: #0a0c14;
+            --text-dim: rgba(255,255,255,0.5);
+            --blue-glow: rgba(0, 122, 255, 0.3);
         }
 
         body, html { 
@@ -29,12 +30,11 @@
             scrollbar-width: none;
         }
 
-        /* --- FOND ANIMÉ DÉGRADÉ --- */
         .bg-animated {
             position: fixed;
             inset: 0;
             z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #050505 100%);
+            background: radial-gradient(circle at 50% 50%, #001a35 0%, #02040a 100%);
             animation: gradientMove 10s ease-in-out infinite alternate;
         }
 
@@ -49,9 +49,8 @@
             opacity: 0.05; contrast: 150%;
         }
 
-        /* --- SPLASH SCREEN --- */
         #splash {
-            position: fixed; inset: 0; background: black; z-index: 10000;
+            position: fixed; inset: 0; background: #000; z-index: 10000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             cursor: pointer; transition: 1.5s cubic-bezier(0.8, 0, 0.2, 1);
         }
@@ -63,12 +62,12 @@
         }
 
         .orbit {
-            position: absolute; border: 1px solid rgba(255,255,255,0.05);
+            position: absolute; border: 1px solid rgba(0, 122, 255, 0.1);
             border-radius: 50%; pointer-events: none;
         }
-        .o1 { width: 850px; height: 850px; animation: rotate 40s linear infinite; border-top: 1px solid rgba(255,255,255,0.2); }
+        .o1 { width: 850px; height: 850px; animation: rotate 40s linear infinite; border-top: 1px solid var(--accent); }
         .o2 { width: 650px; height: 650px; animation: rotate 30s linear infinite reverse; border-right: 1px solid rgba(255,255,255,0.1); }
-        .o3 { width: 450px; height: 450px; animation: rotate 20s linear infinite; border-bottom: 1px solid rgba(255,255,255,0.3); }
+        .o3 { width: 450px; height: 450px; animation: rotate 20s linear infinite; border-bottom: 1px solid var(--accent); }
 
         .logo-text-wrapper {
             position: relative; z-index: 10; text-align: center; display: flex; flex-direction: column; align-items: center;
@@ -77,8 +76,9 @@
         .logo-massive {
             font-size: clamp(3rem, 15vw, 10rem); font-weight: 800; letter-spacing: -5px; margin: 0;
             text-transform: uppercase; line-height: 0.9;
-            background: linear-gradient(180deg, #fff 40%, #333 100%);
+            background: linear-gradient(180deg, #fff 40%, var(--accent) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--blue-glow));
         }
 
         .sub-massive {
@@ -88,19 +88,17 @@
 
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- NAV --- */
         .header-container { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); z-index: 999; opacity: 0; transition: 1s ease 1s; }
         .header-container.show { opacity: 1; }
         .dynamic-island {
-            background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(40px);
-            border: 1px solid rgba(255,255,255,0.1); padding: 12px 40px; border-radius: 100px;
+            background: rgba(5, 10, 20, 0.8); backdrop-filter: blur(40px);
+            border: 1px solid rgba(0, 122, 255, 0.2); padding: 12px 40px; border-radius: 100px;
             display: flex; align-items: center; gap: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
         .nav-links { display: flex; gap: 25px; list-style: none; margin: 0; padding: 0; }
         .nav-links li { font-size: 0.75rem; font-weight: 800; opacity: 0.3; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-        .nav-links li:hover, .nav-links li.active { opacity: 1; color: white; }
+        .nav-links li:hover, .nav-links li.active { opacity: 1; color: var(--accent); }
 
-        /* --- CONTENT --- */
         .site-wrapper { height: 100vh; overflow-y: auto; opacity: 0; transition: 2s ease; position: relative; }
         .site-wrapper.visible { opacity: 1; }
 
@@ -108,52 +106,66 @@
         .content-section.active { display: block; }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        /* --- GRID --- */
         .work-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 80px; }
         .work-cube { 
             position: relative; width: 400px; height: 400px; border-radius: 30px; 
-            overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.05);
-            background: #0a0a0a; transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+            overflow: hidden; cursor: pointer; border: 1px solid rgba(0, 122, 255, 0.1);
+            background: #05070a; transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
         }
-        .work-cube img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; filter: grayscale(1); opacity: 0.6; }
-        .work-cube:hover { transform: translateY(-15px); border-color: rgba(255,255,255,0.4); }
-        .work-cube:hover img { filter: grayscale(0); opacity: 1; transform: scale(1.05); }
+
+        .work-cube img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1); 
+            filter: grayscale(0); 
+            opacity: 1; 
+        }
+
+        .work-cube:hover { 
+            transform: translateY(-15px); 
+            border-color: var(--accent); 
+            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2); 
+        }
+
+        .work-cube:hover img { 
+            transform: scale(1.08); 
+        }
         
         .cube-overlay {
-            position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            position: absolute; inset: 0; 
+            background: linear-gradient(transparent 50%, rgba(2, 4, 10, 0.8));
             display: flex; align-items: flex-end; padding: 30px; opacity: 0; transition: 0.4s;
         }
         .work-cube:hover .cube-overlay { opacity: 1; }
-        .cube-overlay h3 { margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; }
+        .cube-overlay h3 { margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); }
 
-        #gallery-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 20000; display: none; flex-direction: column; padding: 100px 50px; overflow-y: auto; }
-        .close-btn { position: fixed; top: 40px; right: 50px; font-size: 3rem; cursor: pointer; color: white; z-index: 20001; }
+        #gallery-modal { position: fixed; inset: 0; background: rgba(0,2,5,0.98); z-index: 20000; display: none; flex-direction: column; padding: 100px 50px; overflow-y: auto; }
+        .close-btn { position: fixed; top: 40px; right: 50px; font-size: 3rem; cursor: pointer; color: var(--accent); z-index: 20001; }
         .modal-grid { display: grid; gap: 30px; max-width: 1400px; margin: 50px auto; width: 100%; }
-        .modal-grid img { width: 100%; height: auto; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); object-fit: contain; }
+        .modal-grid img { width: 100%; height: auto; border-radius: 20px; border: 1px solid rgba(0, 122, 255, 0.2); object-fit: contain; }
 
         .grid-3x3 { grid-template-columns: repeat(3, 1fr); }
         .grid-2x2 { grid-template-columns: repeat(2, 1fr); }
 
         .team-grid { display: flex; justify-content: center; gap: 40px; margin-top: 60px; flex-wrap: wrap; }
-        .member-card { background: rgba(17,17,17,0.6); backdrop-filter: blur(10px); padding: 40px; border-radius: 40px; min-width: 280px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 20px; border: 2px solid rgba(255,255,255,0.1); }
+        .member-card { background: rgba(10, 20, 40, 0.4); backdrop-filter: blur(10px); padding: 40px; border-radius: 40px; min-width: 280px; text-align: center; border: 1px solid rgba(0, 122, 255, 0.1); }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 20px; border: 2px solid var(--accent); box-shadow: 0 0 15px var(--blue-glow); }
 
-        /* --- FOOTER --- */
         .site-footer {
-            padding: 40px 5%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 5%; background: linear-gradient(to top, rgba(0,5,15,0.9), transparent);
+            color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid rgba(0, 122, 255, 0.1);
             display: flex; justify-content: space-between; align-items: center;
             margin-top: 50px; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* --- BOUTON DISCORD --- */
         .discord-btn {
             display: inline-block; width: 100%; padding: 25px; border-radius: 100px; border: none; 
-            background: #5865F2; color: #fff; font-weight: 800; margin-top: 30px; 
+            background: var(--accent); color: #fff; font-weight: 800; margin-top: 30px; 
             cursor: pointer; font-size: 1.1rem; text-decoration: none; text-align: center;
-            transition: 0.3s;
+            transition: 0.3s; box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
         }
-        .discord-btn:hover { background: #4752c4; transform: scale(1.02); }
+        .discord-btn:hover { background: #0056b3; transform: scale(1.02); }
 
     </style>
 </head>
@@ -170,13 +182,13 @@
         </div>
         <div class="logo-text-wrapper">
             <h1 class="logo-massive">WORLD GRAPHIC</h1>
-            <div class="sub-massive">CLIQUEZ POUR EXPLORER</div>
+            <div class="sub-massive" style="color: var(--accent)">CLIQUEZ POUR EXPLORER</div>
         </div>
     </div>
 
     <div class="header-container" id="island-nav">
         <div class="dynamic-island">
-            <div style="font-weight:900; letter-spacing:1px; color:#fff; display:flex; align-items:center;">
+            <div style="font-weight:900; letter-spacing:1px; color:var(--accent); display:flex; align-items:center;">
                 WorldGraphic
             </div>
             <ul class="nav-links">
@@ -190,7 +202,7 @@
 
     <div id="gallery-modal">
         <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h1 id="modal-title" style="text-align:center; font-size: 3rem; text-transform: uppercase;">CATÉGORIE</h1>
+        <h1 id="modal-title" style="text-align:center; font-size: 3rem; text-transform: uppercase; color: var(--accent);">CATÉGORIE</h1>
         <div class="modal-grid" id="modal-content"></div>
     </div>
 
@@ -198,21 +210,16 @@
         
         <section id="presentation" class="content-section active">
             <div style="text-align: center;">
-                <h2 style="font-size: clamp(2rem, 10vw, 5rem); font-weight: 800; margin: 0;">WORLD GRAPHIC</h2>
+                <h2 style="font-size: clamp(2rem, 10vw, 5rem); font-weight: 800; margin: 0; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">WORLD GRAPHIC</h2>
                 <p style="color: var(--text-dim); max-width: 700px; margin: 30px auto; font-size: 1.2rem; line-height: 1.8;">
                     Spécialiste de l'identité visuelle haut de gamme pour serveurs FiveM.
                 </p>
             </div>
             <div class="team-grid">
                 <div class="member-card">
-                    <img src="images/pas_toucher/image2.webp" alt="Fondateur 1" class="profile-avatar">
+                    <img src="images/pas_toucher/logo_lms.webp" alt="Fondateur 1" class="profile-avatar">
                     <h3 style="margin:0; font-size: 1.5rem;">LMS</h3>
-                    <p style="color:var(--text-dim); margin-top:10px;">Graphiste FiveM</p>
-                </div>
-                <div class="member-card">
-                    <img src="images/pas_toucher/image.png" alt="Fondateur 2" class="profile-avatar">
-                    <h3 style="margin:0; font-size: 1.5rem;">Valca</h3>
-                    <p style="color:var(--text-dim); margin-top:10px;">Graphiste FiveM</p>
+                    <p style="color:var(--accent); margin-top:10px; font-weight: 700;">Graphiste FiveM</p>
                 </div>
             </div>
         </section>
@@ -221,47 +228,47 @@
             <h1 style="text-align: center; font-size: 3rem; font-weight: 800; margin-bottom: 50px;">PORTFOLIO WORLDGRAPH</h1>
             <div class="work-grid">
                 <div class="work-cube" onclick="openGallery('Logo')">
-                    <img src="images/pas_toucher/logo_fivem.gif" alt="Logo">
-                    <div class="cube-overlay"><h3>Logo</h3></div>
+                    <img src="images/pas_toucher/logofivem.png" alt="Logo FiveM">
+                    <div class="cube-overlay"><h3>Logo FiveM</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Logo GIF')">
-                    <img src="images/pas_toucher/logo_gif.gif" alt="Logo GIF">
+                    <img src="images/pas_toucher/logogif.png" alt="Logo GIF">
                     <div class="cube-overlay"><h3>Logo GIF</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Bannière Discord')">
-                    <img src="images/pas_toucher/banniere_discord.gif" alt="Discord">
+                    <img src="images/pas_toucher/bannierediscord.png" alt="Discord">
                     <div class="cube-overlay"><h3>Bannière Discord</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Bannière Invitation')">
-                    <img src="images/pas_toucher/banniere_invite.gif" alt="Invitation">
+                    <img src="images/pas_toucher/banniereinvitation.png" alt="Invitation">
                     <div class="cube-overlay"><h3>Bannière Invitation</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Bannière FiveM')">
-                    <img src="images/pas_toucher/banniere_fivem.png" alt="FiveM">
+                    <img src="images/pas_toucher/bannierefivem.png" alt="FiveM">
                     <div class="cube-overlay"><h3>Bannière FiveM</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Bannière Menu F5')">
-                    <img src="images/pas_toucher/banniere_fivemf5.png" alt="Menu F5">
+                    <img src="images/pas_toucher/bannieref5.png" alt="Menu F5">
                     <div class="cube-overlay"><h3>Bannière Menu F5</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Affiche Personnalisée')">
-                    <img src="images/pas_toucher/logo_gif.gif" alt="Affiche">
+                    <img src="images/pas_toucher/affichefivem.png" alt="Affiche">
                     <div class="cube-overlay"><h3>Affiche</h3></div>
                 </div>
-                <div class="work-cube" onclick="openGallery('Emoji')">
-                    <img src="https://via.placeholder.com/400/111/fff?text=EMOJI" alt="Emoji">
-                    <div class="cube-overlay"><h3>Emoji</h3></div>
+                <div class="work-cube" onclick="openGallery('Teamflag')">
+                    <img src="images/pas_toucher/teamflag.png" alt="Teamflag">
+                    <div class="cube-overlay"><h3>Team flag</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Loading Screen')">
-                    <img src="https://via.placeholder.com/400/111/fff?text=LOADING" alt="Loading">
+                    <img src="images/pas_toucher/loadingscreen.png" alt="Loading">
                     <div class="cube-overlay"><h3>Loading Screen</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Tenue Staff')">
-                    <img src="https://via.placeholder.com/400/111/fff?text=TENUE" alt="Tenue">
+                    <img src="images/pas_toucher/tenuestaff.png" alt="Tenue">
                     <div class="cube-overlay"><h3>Tenue Staff</h3></div>
                 </div>
                 <div class="work-cube" onclick="openGallery('Coins')">
-                    <img src="https://via.placeholder.com/400/111/fff?text=COINS" alt="Coins">
+                    <img src="images/pas_toucher/coin.png" alt="Coins">
                     <div class="cube-overlay"><h3>Coins</h3></div>
                 </div>
             </div>
@@ -269,7 +276,7 @@
 
         <section id="propos" class="content-section">
             <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <h1 style="font-size: 3rem; font-weight: 800;">L'HISTOIRE</h1>
+                <h1 style="font-size: 3rem; font-weight: 800; color: var(--accent);">L'HISTOIRE</h1>
                 <p style="font-size: 1.2rem; line-height: 2; color: var(--text-dim); margin-top: 40px;">
                     World Graphic est né de l'union de passionnés de graphisme pour élever les standards visuels du Gaming.
                 </p>
@@ -277,35 +284,35 @@
         </section>
 
         <section id="commande" class="content-section">
-            <div style="max-width: 700px; margin: 0 auto; background: rgba(17,17,17,0.8); backdrop-filter: blur(20px); padding: 60px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.05);">
-                <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 20px;">LANCER UN PROJET</h2>
+            <div style="max-width: 700px; margin: 0 auto; background: rgba(5,15,30,0.8); backdrop-filter: blur(20px); padding: 60px; border-radius: 50px; border: 1px solid rgba(0, 122, 255, 0.2);">
+                <h2 style="font-size: 2.5rem; text-align: center; margin-bottom: 20px; color: var(--accent);">LANCER UN PROJET</h2>
                 <p style="text-align: center; color: var(--text-dim); margin-bottom: 30px;">
                     Pour passer commande, rejoignez notre serveur Discord officiel.<br>
                     1. Consultez d'abord le salon <b>💵・tarifs</b> pour connaître nos prix.<br>
                     2. Dirigez-vous ensuite dans le salon <b>📩・ticket</b> pour passer votre commande.
                 </p>
-                <a href="https://discord.gg/9NXxPKeGxe" class="discord-btn">DISCORD</a>
+                <a href="https://discord.gg/worldgraph" class="discord-btn">DISCORD</a>
             </div>
         </section>
 
         <footer class="site-footer">
-            <div class="footer-logo-text">WORLD GRAPHIC</div>
+            <div class="footer-logo-text" style="color: var(--accent)">WORLD GRAPHIC</div>
             <span>© 2026 WORLD GRAPHIC, tous droits réservés.</span>
-            <div class="footer-logo-text">WORLD GRAPHIC</div>
+            <div class="footer-logo-text" style="color: var(--accent)">BY SOKZEE</div>
         </footer>
     </div>
 
     <script>
         const galleries = {
-            'Logo': ['images/logofivem/logo_amnesty.png', 'images/logofivem/logo_divinity.png', 'images/logofivem/logo_destiny.png', 'images/logofivem/logo_run_leak.png', 'images/logofivem/logo_blueshark.png', 'images/logofivem/logo_gworld.png'],
+            'Logo': ['images/logofivem/logo_amnesty.png', 'images/logofivem/logo_snew.png', 'images/logofivem/logo_snaqz.png', 'images/logofivem/logo_divinity.png', 'images/logofivem/logo_flashlast.png', 'images/logofivem/logo_run_leak.png', 'images/logofivem/logo_horizonlegacy.png', 'images/logofivem/logo_patoche.png', 'images/logofivem/logo_mcity.png', 'images/logofivem/logo_blueshark.png'],
             'Logo GIF': ['images/logogif/gif_divinity.gif'],
-            'Bannière Discord': ['images/bannierediscord/banniere_divinity.png'],
+            'Bannière Discord': ['images/bannierediscord/banniere_divinity.png', 'images/bannierediscord/banniere_horizonlegacy.png', 'images/bannierediscord/banniere_patoche.png'],
             'Bannière Invitation': [],
             'Bannière FiveM': ['images/bannierefivem/bannierefivem_amnesty.png'],
-            'Bannière Menu F5': ['images/bannieref5/f5_amnesty.png'],
+            'Bannière Menu F5': ['images/bannieref5/f5_amnesty.png', 'images/bannieref5/f5_flashlast.png', 'images/bannieref5/f5_patoche.png'],
             'Affiche Personnalisée': ['images/affiches/ouverture_amnesty.png'],
             'Emoji': [],
-            'Loading Screen': ['images/loadingscreen/loading_amnesty.png', 'images/loadingscreen/loading_destiny.png', 'images/loadingscreen/loading_destiny2.png', 'images/loadingscreen/loading_vinity.png'],
+            'Loading Screen': ['images/loadingscreen/loading_amnesty.png', 'images/loadingscreen/loading_vinity.png', 'images/loadingscreen/loading_horizonlegacy.png'],
             'Tenue Staff': [],
             'Coins': []
         };
@@ -331,7 +338,9 @@
             content.innerHTML = ''; 
             content.className = 'modal-grid';
 
-            if (title.includes('Bannière') || title.includes('Affiche') || title.includes('Loading')) {
+            if (title === 'Bannière FiveM') {
+                content.classList.remove('grid-2x2', 'grid-3x3');
+            } else if (title.includes('Bannière') || title.includes('Affiche') || title.includes('Loading')) {
                 content.classList.add('grid-2x2');
             } else {
                 content.classList.add('grid-3x3');
